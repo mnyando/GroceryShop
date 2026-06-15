@@ -1,0 +1,21 @@
+# Environments & Dependencies
+virtual/
+venv/
+ENV/
+env/
+
+# Credentials & Database
+serviceAccountKey.json
+local_db.json
+.env
+
+# Python Cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+
+# OS Specific
+.DS_Store
+Thumbs.db

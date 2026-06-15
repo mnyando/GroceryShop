@@ -1,0 +1,209 @@
+{% extends 'base.html' %}
+
+{% block title %}Checkout | Mama Mboga{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="text-center mb-5">
+        <h2 class="display-6 fw-bold heading-font text-dark"><i class="fa-solid fa-credit-card text-success me-2"></i> Complete Your Purchase</h2>
+        <p class="text-muted">Fill in your delivery address and choose a payment method below.</p>
+        <hr class="w-105 mx-auto text-success border-2">
+    </div>
+
+    <div class="row g-5">
+        <!-- Delivery and Payment Forms -->
+        <div class="col-lg-7">
+            <div class="card shadow-sm border border-light-subtle rounded-3 p-4 p-md-5 bg-white mb-4">
+                <h4 class="fw-bold heading-font text-dark mb-4"><i class="fa-solid fa-truck text-success me-2"></i> Delivery Details</h4>
+                
+                <form id="checkout-form">
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label for="shipping-name" class="form-label fw-semibold">Receiver's Name</label>
+                            <input type="text" class="form-control py-2" id="shipping-name" 
+                                   value="{% if current_user.is_authenticated %}{{ current_user.firstname }} {{ current_user.lastname }}{% endif %}" 
+                                   required placeholder="e.g. John Doe">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="shipping-phone" class="form-label fw-semibold">M-Pesa Phone Number</label>
+                            <input type="tel" class="form-control py-2" id="shipping-phone" 
+                                   value="" 
+                                   required placeholder="e.g. 0712345678" pattern="^(07|01)\d{8}$" title="Enter a valid Kenyan number (e.g. 0712345678)">
+                            <small class="text-muted">Used for STK push and notifications.</small>
+                        </div>
+                        <div class="col-12">
+                            <label for="shipping-email" class="form-label fw-semibold">Email Address</label>
+                            <input type="email" class="form-control py-2" id="shipping-email" 
+                                   value="{% if current_user.is_authenticated %}{{ current_user.email }}{% endif %}" 
+                                   required placeholder="e.g. john@example.com">
+                        </div>
+                        <div class="col-12">
+                            <label for="shipping-address" class="form-label fw-semibold">Delivery Address / Location</label>
+                            <textarea class="form-control py-2" id="shipping-address" rows="3" 
+                                      required placeholder="e.g. Apartment A4, Wood Avenue, Kilimani, Nairobi"></textarea>
+                        </div>
+                    </div>
+
+                    <h4 class="fw-bold heading-font text-dark mb-4 pt-3 border-top"><i class="fa-solid fa-wallet text-success me-2"></i> Select Payment Method</h4>
+                    
+                    <!-- Payment Methods Navigation Tabs -->
+                    <ul class="nav nav-pills nav-fill mb-4 p-1 bg-light rounded-pill border" id="paymentTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link rounded-pill active fw-semibold" id="mpesa-tab" data-bs-toggle="tab" data-bs-target="#mpesa-pane" type="button" role="tab" aria-controls="mpesa-pane" aria-selected="true">
+                                <i class="fa-solid fa-mobile-screen-button me-1"></i> M-Pesa
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link rounded-pill fw-semibold" id="paypal-tab" data-bs-toggle="tab" data-bs-target="#paypal-pane" type="button" role="tab" aria-controls="paypal-pane" aria-selected="false">
+                                <i class="fa-brands fa-paypal me-1"></i> PayPal
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link rounded-pill fw-semibold" id="card-tab" data-bs-toggle="tab" data-bs-target="#card-pane" type="button" role="tab" aria-controls="card-pane" aria-selected="false">
+                                <i class="fa-solid fa-credit-card me-1"></i> Visa / Card
+                            </button>
+                        </li>
+                    </ul>
+                    
+                    <!-- Payment Methods Content Panes -->
+                    <div class="tab-content" id="paymentTabContent">
+                        
+                        <!-- M-Pesa payment section -->
+                        <div class="tab-pane fade show active" id="mpesa-pane" role="tabpanel" aria-labelledby="mpesa-tab">
+                            <div class="p-3 bg-light rounded border border-light-subtle mb-3">
+                                <div class="d-flex gap-3 mb-3 border-bottom pb-2">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="mpesa-option" id="mpesa-stk" value="stk" checked>
+                                        <label class="form-check-label fw-semibold" for="mpesa-stk">M-Pesa STK Push (Interactive)</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="mpesa-option" id="mpesa-paybill" value="paybill">
+                                        <label class="form-check-label fw-semibold" for="mpesa-paybill">Paybill / Till Number</label>
+                                    </div>
+                                </div>
+
+                                <!-- STK Push Panel -->
+                                <div id="stk-push-panel">
+                                    <p class="small text-muted mb-3">Receive a prompt on your phone. Enter your PIN to approve payment instantly.</p>
+                                    <div class="row align-items-center g-2">
+                                        <div class="col-sm-8">
+                                            <input type="tel" class="form-control" id="stk-phone" placeholder="Enter phone e.g. 0712345678">
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <button type="button" class="btn btn-success w-100" id="trigger-stk-btn">Request STK</button>
+                                        </div>
+                                    </div>
+                                    <!-- STK Process indicator -->
+                                    <div id="stk-loader" class="mt-3 p-3 bg-white border rounded text-center d-none shadow-sm">
+                                        <div class="spinner-border text-success mb-2" role="status"></div>
+                                        <p class="mb-0 text-dark font-monospace" id="stk-status-text">Sending STK Push prompt...</p>
+                                    </div>
+                                </div>
+
+                                <!-- Paybill instructions panel -->
+                                <div id="paybill-panel" class="d-none">
+                                    <div class="p-3 bg-white rounded border border-success-subtle mb-3 shadow-sm text-center">
+                                        <h5 class="text-success fw-bold heading-font mb-1"><i class="fa-solid fa-leaf"></i> Store Paybill Details</h5>
+                                        <p class="mb-0 fs-5">Lipa Na M-Pesa Paybill: <strong>882882</strong></p>
+                                        <p class="mb-0">Account Number: <strong>MAMA</strong></p>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="mpesa-code" class="form-label fw-semibold">Enter M-Pesa Transaction Code</label>
+                                        <input type="text" class="form-control font-monospace text-uppercase" id="mpesa-code" placeholder="e.g. QWE123RTY4" maxlength="10">
+                                        <small class="text-muted">Submit the 10-character code received from Safaricom.</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- PayPal payment section -->
+                        <div class="tab-pane fade" id="paypal-pane" role="tabpanel" aria-labelledby="paypal-tab">
+                            <div class="p-4 bg-light rounded border border-light-subtle text-center mb-3">
+                                <div class="paypal-logo mb-3 text-primary fs-3 fw-extrabold italic">
+                                    <i class="fa-brands fa-paypal"></i> PayPal
+                                </div>
+                                <p class="small text-muted mb-4">Pay securely with your PayPal account or linked credit/debit card.</p>
+                                <button type="button" class="btn btn-primary px-5 py-2 fw-bold" id="paypal-simulate-btn">
+                                    <i class="fa-brands fa-paypal me-2"></i> Pay with PayPal
+                                </button>
+                                
+                                <div id="paypal-loader" class="mt-3 p-3 bg-white border rounded text-center d-none shadow-sm">
+                                    <div class="spinner-border text-primary mb-2" role="status"></div>
+                                    <p class="mb-0 text-dark">Simulating PayPal validation...</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Card/Visa payment section -->
+                        <div class="tab-pane fade" id="card-pane" role="tabpanel" aria-labelledby="card-tab">
+                            <div class="p-4 bg-light rounded border border-light-subtle mb-3">
+                                <div class="row g-3">
+                                    <div class="col-12">
+                                        <label for="card-holder" class="form-label fw-semibold">Cardholder Name</label>
+                                        <input type="text" class="form-control" id="card-holder" placeholder="e.g. John Doe">
+                                    </div>
+                                    <div class="col-12">
+                                        <label for="card-number" class="form-label fw-semibold">Card Number</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="card-number" placeholder="4000 1234 5678 9010" maxlength="19">
+                                            <span class="input-group-text bg-white"><i class="fa-solid fa-credit-card text-muted"></i></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="card-expiry" class="form-label fw-semibold">Expiry Date</label>
+                                        <input type="text" class="form-control text-center" id="card-expiry" placeholder="MM/YY" maxlength="5">
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="card-cvv" class="form-label fw-semibold">CVV Code</label>
+                                        <input type="password" class="form-control text-center" id="card-cvv" placeholder="123" maxlength="3">
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-dark w-100 mt-4 py-2 fw-semibold" id="card-simulate-btn">
+                                    Verify & Validate Card
+                                </button>
+                                
+                                <div id="card-loader" class="mt-3 p-3 bg-white border rounded text-center d-none shadow-sm">
+                                    <div class="spinner-border text-dark mb-2" role="status"></div>
+                                    <p class="mb-0 text-dark">Validating credit card...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Final Order Execution button -->
+                    <button type="submit" class="btn btn-success btn-lg w-100 py-3 mt-4 fw-bold shadow-sm" id="complete-purchase-btn" disabled>
+                        <i class="fa-solid fa-circle-check me-2"></i> Submit and Complete Order
+                    </button>
+                    <div class="text-center mt-3 text-muted fs-7">
+                        <i class="fa-solid fa-lock text-success me-1"></i> Payment validation is required before completing order.
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Sidebar Order breakdown -->
+        <div class="col-lg-5">
+            <div class="card shadow-sm border border-light-subtle rounded-3 p-4 bg-light position-sticky" style="top: 100px;">
+                <h4 class="fw-bold heading-font text-dark mb-4"><i class="fa-solid fa-shopping-bag text-success me-2"></i> Order Summary</h4>
+                
+                <div class="checkout-summary-list border-bottom pb-3 mb-3" id="checkout-summary-items">
+                    <!-- Dynamic checkouts inserted by JavaScript -->
+                </div>
+
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="text-muted">Subtotal</span>
+                    <strong class="text-dark" id="summary-subtotal">KSh 0.00</strong>
+                </div>
+                <div class="d-flex justify-content-between mb-3 border-bottom pb-2">
+                    <span class="text-muted">Standard Delivery Fee</span>
+                    <strong class="text-dark">KSh 150.00</strong>
+                </div>
+                <div class="d-flex justify-content-between align-items-center mb-0">
+                    <h5 class="fw-bold mb-0">Grand Total:</h5>
+                    <h4 class="fw-extrabold text-success mb-0" id="summary-grand-total">KSh 150.00</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,290 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Control Panel | Mama Mboga{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <!-- Dashboard Header -->
+    <div class="d-flex justify-content-between align-items-center flex-wrap mb-5 border-bottom pb-3">
+        <div>
+            <h2 class="display-6 fw-bold heading-font text-dark mb-1">
+                <i class="fa-solid fa-gauge-high text-success me-2"></i> Store Control Panel
+            </h2>
+            <p class="text-muted mb-0">Manage inventory items, review customer checkout orders, and track revenue metrics.</p>
+        </div>
+        <span class="badge bg-dark fs-6 py-2 px-3 shadow-sm border border-secondary mt-3 mt-md-0">
+            <i class="fa-solid fa-user-shield text-warning me-1"></i> Admin Session
+        </span>
+    </div>
+
+    <!-- Quick Stats Cards Row -->
+    <div class="row g-4 mb-5">
+        <!-- Revenue Card -->
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 border-start border-4 border-success bg-white h-100 rounded-3 p-4">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <h6 class="text-uppercase text-muted fw-bold small mb-1">Net Earnings</h6>
+                        <h3 class="fw-extrabold text-success mb-0">KSh {{ "{:,.2f}".format(revenue) }}</h3>
+                    </div>
+                    <div class="bg-success-subtle p-3 rounded-circle text-success fs-3">
+                        <i class="fa-solid fa-coins"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Active Orders Card -->
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 border-start border-4 border-warning bg-white h-100 rounded-3 p-4">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <h6 class="text-uppercase text-muted fw-bold small mb-1">Pending Orders</h6>
+                        <h3 class="fw-extrabold text-warning mb-0">{{ pending_orders }}</h3>
+                    </div>
+                    <div class="bg-warning-subtle p-3 rounded-circle text-warning fs-3">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Total Sales count -->
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 border-start border-4 border-info bg-white h-100 rounded-3 p-4">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <h6 class="text-uppercase text-muted fw-bold small mb-1">Completed Sales</h6>
+                        <h3 class="fw-extrabold text-info mb-0">{{ total_sales_count }}</h3>
+                    </div>
+                    <div class="bg-info-subtle p-3 rounded-circle text-info fs-3">
+                        <i class="fa-solid fa-truck-fast"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Actions Tabs -->
+    <ul class="nav nav-tabs mb-4 border-bottom border-light-subtle" id="adminTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active fw-bold text-dark px-4 py-3" id="orders-tab" data-bs-toggle="tab" data-bs-target="#orders-pane" type="button" role="tab" aria-controls="orders-pane" aria-selected="true">
+                <i class="fa-solid fa-list-check text-success me-1"></i> Customer Orders ({{ orders | length }})
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link fw-bold text-dark px-4 py-3" id="inventory-tab" data-bs-toggle="tab" data-bs-target="#inventory-pane" type="button" role="tab" aria-controls="inventory-pane" aria-selected="false">
+                <i class="fa-solid fa-boxes-stacked text-success me-1"></i> Commodities Inventory ({{ products | length }})
+            </button>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="adminTabContent">
+        <!-- Customer Orders Table Pane -->
+        <div class="tab-pane fade show active" id="orders-pane" role="tabpanel" aria-labelledby="orders-tab">
+            <div class="card border border-light-subtle shadow-sm rounded-3 bg-white p-4">
+                <h4 class="fw-bold heading-font mb-4 text-dark"><i class="fa-solid fa-cart-shopping text-success me-2"></i> Client Orders Log</h4>
+                
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer Details</th>
+                                <th>Items Ordered</th>
+                                <th>Grand Total</th>
+                                <th>Payment Info</th>
+                                <th>Status</th>
+                                <th class="text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if orders %}
+                                {% for order in orders %}
+                                    <tr>
+                                        <td>
+                                            <span class="font-monospace text-uppercase small bg-light p-2 border rounded">{{ order.id[:8] }}...</span>
+                                        </td>
+                                        <td>
+                                            <div class="fw-bold text-dark">{{ order.customer_name }}</div>
+                                            <div class="small text-muted mb-1"><i class="fa-solid fa-phone fs-7 me-1"></i>{{ order.phone }}</div>
+                                            <div class="small text-muted"><i class="fa-solid fa-map-marker fs-7 me-1"></i>{{ order.shipping_address }}</div>
+                                        </td>
+                                        <td>
+                                            <ul class="list-unstyled mb-0 ps-0 fs-7">
+                                                {% for item in order.items %}
+                                                    <li class="text-nowrap text-truncate" style="max-width: 200px;">
+                                                        <span class="badge bg-secondary me-1">{{ item.quantity }}x</span> {{ item.name }}
+                                                    </li>
+                                                {% endfor %}
+                                            </ul>
+                                        </td>
+                                        <td>
+                                            <span class="fw-bold text-dark">KSh {{ "{:,.2f}".format(order.total_price) }}</span>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-light text-dark border mb-1 d-inline-block text-capitalize">
+                                                {{ order.payment_method }}
+                                            </span>
+                                            <div class="small text-muted font-monospace">{{ order.payment_details.transaction_id }}</div>
+                                            <div class="fs-7">
+                                                Payment: 
+                                                {% if order.payment_details.status == 'paid' %}
+                                                    <span class="text-success fw-bold">Paid</span>
+                                                {% else %}
+                                                    <span class="text-warning fw-bold">Pending</span>
+                                                {% endif %}
+                                            </div>
+                                        </td>
+                                        <td>
+                                            {% if order.status == 'pending' %}
+                                                <span class="badge bg-warning text-dark text-uppercase p-2">Pending</span>
+                                            {% elif order.status == 'paid' %}
+                                                <span class="badge bg-success text-uppercase p-2">Paid</span>
+                                            {% elif order.status == 'shipped' %}
+                                                <span class="badge bg-primary text-uppercase p-2">Shipped</span>
+                                            {% elif order.status == 'delivered' %}
+                                                <span class="badge bg-info text-dark text-uppercase p-2">Delivered</span>
+                                            {% else %}
+                                                <span class="badge bg-danger text-uppercase p-2">Cancelled</span>
+                                            {% endif %}
+                                        </td>
+                                        <td class="text-end">
+                                            <!-- Status modifier Form -->
+                                            <form action="{{ url_for('main.admin_update_order_status', order_id=order.id) }}" method="POST" class="d-inline-flex align-items-center gap-1">
+                                                <select name="status" class="form-select form-select-sm" style="width: auto;" onchange="this.form.submit()">
+                                                    <option value="" disabled selected>Update Status</option>
+                                                    <option value="pending">Pending</option>
+                                                    <option value="paid">Paid</option>
+                                                    <option value="shipped">Shipped</option>
+                                                    <option value="delivered">Delivered</option>
+                                                    <option value="cancelled">Cancelled</option>
+                                                </select>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td colspan="7" class="text-center py-4 text-muted">
+                                        <i class="fa-solid fa-inbox fs-2 mb-2 d-block"></i> No customer orders found.
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Commodities Inventory Pane -->
+        <div class="tab-pane fade" id="inventory-pane" role="tabpanel" aria-labelledby="inventory-tab">
+            <div class="row g-4">
+                <!-- Add New Product Form -->
+                <div class="col-lg-4">
+                    <div class="card border border-light-subtle shadow-sm rounded-3 bg-white p-4">
+                        <h4 class="fw-bold heading-font mb-4 text-dark"><i class="fa-solid fa-plus-circle text-success me-2"></i> Add Commodity</h4>
+                        
+                        <form action="{{ url_for('main.admin_add_product') }}" method="POST" id="add-product-form">
+                            <div class="mb-3">
+                                <label for="name" class="form-label fw-semibold">Commodity Name</label>
+                                <input type="text" class="form-control" name="name" id="name" required placeholder="e.g. Fresh Mangoes">
+                            </div>
+                            <div class="mb-3">
+                                <label for="category" class="form-label fw-semibold">Category</label>
+                                <select class="form-select" name="category" id="category" required>
+                                    <option value="Vegetables">Vegetables</option>
+                                    <option value="Fruits">Fruits</option>
+                                    <option value="Grains">Grains</option>
+                                    <option value="Herbs">Herbs</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="row g-2 mb-3">
+                                <div class="col-7">
+                                    <label for="price" class="form-label fw-semibold">Price (KSh)</label>
+                                    <input type="number" step="0.01" class="form-control" name="price" id="price" required placeholder="e.g. 150.00">
+                                </div>
+                                <div class="col-5">
+                                    <label for="unit" class="form-label fw-semibold">Unit Type</label>
+                                    <input type="text" class="form-control" name="unit" id="unit" required placeholder="e.g. per kg">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="image_url" class="form-label fw-semibold">Image HD URL</label>
+                                <input type="url" class="form-control" name="image_url" id="image_url" placeholder="https://example.com/image.jpg">
+                                <small class="text-muted">Direct URL of a product image. If empty, a placeholder is used.</small>
+                            </div>
+                            <div class="mb-4">
+                                <label for="description" class="form-label fw-semibold">Description</label>
+                                <textarea class="form-control" name="description" id="description" rows="3" placeholder="Describe the commodity details..."></textarea>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-success w-100 py-2 fw-bold shadow-sm">
+                                <i class="fa-solid fa-save me-1"></i> Save Product
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Products Catalog Table -->
+                <div class="col-lg-8">
+                    <div class="card border border-light-subtle shadow-sm rounded-3 bg-white p-4">
+                        <h4 class="fw-bold heading-font mb-4 text-dark"><i class="fa-solid fa-boxes-packing text-success me-2"></i> Inventory Catalog</h4>
+                        
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Image</th>
+                                        <th>Name</th>
+                                        <th>Category</th>
+                                        <th>Price</th>
+                                        <th class="text-end">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% if products %}
+                                        {% for product in products %}
+                                            <tr>
+                                                <td>
+                                                    <img src="{{ product.image_url }}" alt="{{ product.name }}" class="rounded shadow-sm" style="width: 50px; height: 50px; object-fit: cover;">
+                                                </td>
+                                                <td>
+                                                    <div class="fw-bold text-dark">{{ product.name }}</div>
+                                                    <div class="small text-muted">{{ product.description | truncate(60) }}</div>
+                                                </td>
+                                                <td>
+                                                    <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-1">
+                                                        {{ product.category }}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <strong class="text-dark">KSh {{ "{:,.2f}".format(product.price) }}</strong>
+                                                    <div class="small text-muted">/ {{ product.unit }}</div>
+                                                </td>
+                                                <td class="text-end">
+                                                    <!-- Delete Button -->
+                                                    <a href="{{ url_for('main.admin_delete_product', prod_id=product.id) }}" class="btn btn-outline-danger btn-sm" onclick="return confirm('Are you sure you want to delete this product from the inventory?')">
+                                                        <i class="fa-solid fa-trash-can"></i> Delete
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    {% else %}
+                                        <tr>
+                                            <td colspan="5" class="text-center py-4 text-muted">
+                                                <i class="fa-solid fa-boxes-open fs-2 mb-2 d-block"></i> Inventory is currently empty. Add products on the left panel.
+                                            </td>
+                                        </tr>
+                                    {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

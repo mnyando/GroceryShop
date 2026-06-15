@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ user.firstname }}'s Profile | Mama Mboga{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row g-4">
+        <!-- User Information Sidebar Card -->
+        <div class="col-lg-4">
+            <div class="card shadow-sm border border-light-subtle rounded-3 bg-white p-4">
+                <div class="text-center pb-3 border-bottom mb-4">
+                    <span class="fs-1 text-success mb-2 d-inline-block"><i class="fa-solid fa-circle-user"></i></span>
+                    <h4 class="fw-bold heading-font text-dark mb-1">{{ user.firstname }} {{ user.lastname }}</h4>
+                    <p class="text-muted small mb-0">@{{ user.username }}</p>
+                    <span class="badge {% if user.is_admin %}bg-warning text-dark{% else %}bg-success{% endif %} mt-2 px-3 py-1 text-capitalize">
+                        {{ user.role }} Account
+                    </span>
+                </div>
+                
+                <div class="user-details-list">
+                    <div class="mb-3">
+                        <label class="small text-muted fw-bold text-uppercase d-block mb-1">Email Address</label>
+                        <div class="text-dark fw-semibold"><i class="fa-solid fa-envelope text-muted me-2"></i> {{ user.email }}</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="small text-muted fw-bold text-uppercase d-block mb-1">First Name</label>
+                        <div class="text-dark fw-semibold">{{ user.firstname }}</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="small text-muted fw-bold text-uppercase d-block mb-1">Last Name</label>
+                        <div class="text-dark fw-semibold">{{ user.lastname }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Order History Logs -->
+        <div class="col-lg-8">
+            <div class="card shadow-sm border border-light-subtle rounded-3 bg-white p-4">
+                <h4 class="fw-bold heading-font mb-4 text-dark"><i class="fa-solid fa-history text-success me-2"></i> Your Order History</h4>
+                
+                {% if orders %}
+                    <div class="accordion accordion-flush border rounded overflow-hidden" id="ordersAccordion">
+                        {% for order in orders %}
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="heading-{{ order.id }}">
+                                    <button class="accordion-button collapsed px-4 py-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{ order.id }}" aria-expanded="false" aria-controls="collapse-{{ order.id }}">
+                                        <div class="d-flex justify-content-between align-items-center w-100 flex-wrap me-3 g-2">
+                                            <div>
+                                                <span class="fw-bold text-success me-2">#{{ order.id[:8] | upper }}</span>
+                                                <span class="small text-muted d-none d-md-inline">{{ order.created_at[:10] if order.created_at else '' }}</span>
+                                            </div>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <span class="fw-bold text-dark me-2">KSh {{ "{:,.2f}".format(order.total_price) }}</span>
+                                                
+                                                {% if order.status == 'pending' %}
+                                                    <span class="badge bg-warning text-dark text-uppercase fs-8">Pending</span>
+                                                {% elif order.status == 'paid' %}
+                                                    <span class="badge bg-success text-uppercase fs-8">Paid</span>
+                                                {% elif order.status == 'shipped' %}
+                                                    <span class="badge bg-primary text-uppercase fs-8">Shipped</span>
+                                                {% elif order.status == 'delivered' %}
+                                                    <span class="badge bg-info text-dark text-uppercase fs-8">Delivered</span>
+                                                {% else %}
+                                                    <span class="badge bg-danger text-uppercase fs-8">Cancelled</span>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </button>
+                                </h2>
+                                <div id="collapse-{{ order.id }}" class="accordion-collapse collapse" aria-labelledby="heading-{{ order.id }}" data-bs-parent="#ordersAccordion">
+                                    <div class="accordion-body bg-light p-4">
+                                        <h6 class="fw-bold text-dark border-bottom pb-2 mb-3">Order Items:</h6>
+                                        <div class="table-responsive bg-white rounded border p-2 mb-3">
+                                            <table class="table table-sm table-borderless align-middle mb-0">
+                                                <thead>
+                                                    <tr class="table-light">
+                                                        <th>Image</th>
+                                                        <th>Item Name</th>
+                                                        <th class="text-center">Quantity</th>
+                                                        <th class="text-end">Price</th>
+                                                        <th class="text-end">Total</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for item in order.items %}
+                                                        <tr>
+                                                            <td>
+                                                                <img src="{{ item.image_url }}" alt="{{ item.name }}" class="rounded border" style="width: 40px; height: 40px; object-fit: cover;">
+                                                            </td>
+                                                            <td class="fw-bold text-dark">{{ item.name }}</td>
+                                                            <td class="text-center">{{ item.quantity }}</td>
+                                                            <td class="text-end">KSh {{ "{:,.2f}".format(item.price) }}</td>
+                                                            <td class="text-end fw-semibold">KSh {{ "{:,.2f}".format(item.price * item.quantity) }}</td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        
+                                        <div class="row g-3 fs-7 text-muted border-top pt-3">
+                                            <div class="col-md-6">
+                                                <div class="mb-1"><strong>Shipping Address:</strong></div>
+                                                <div>{{ order.shipping_address }}</div>
+                                                <div class="mt-2"><strong>Phone Number:</strong> {{ order.phone }}</div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-1"><strong>Payment Summary:</strong></div>
+                                                <div>Method: <span class="text-capitalize text-dark fw-bold">{{ order.payment_method }}</span></div>
+                                                <div>Code: <span class="font-monospace text-dark">{{ order.payment_details.transaction_id }}</span></div>
+                                                <div>Status: 
+                                                    {% if order.payment_details.status == 'paid' %}
+                                                        <span class="text-success fw-bold">Paid</span>
+                                                    {% else %}
+                                                        <span class="text-warning fw-bold">Pending</span>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="text-center py-5 text-muted">
+                        <i class="fa-solid fa-basket-shopping fs-1 mb-3 d-block text-muted"></i>
+                        <h5>No orders found.</h5>
+                        <p class="small mb-0">Browse our commodities to place your first fresh grocery order!</p>
+                        <a href="/" class="btn btn-success mt-3 btn-sm">Shop Commodities</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

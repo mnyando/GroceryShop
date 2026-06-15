@@ -1,0 +1,4 @@
+Hello {{user.username}}
+Welcome to Mama Mboga App
+You have now sign up for the application and can now start buying the products from our stores.
+Good luck.

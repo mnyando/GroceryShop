@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Account | Mama Mboga{% endblock %}
+
+{% block content %}
+<div class="container my-5 py-3">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-lg border border-light-subtle rounded-4 overflow-hidden bg-white">
+                <!-- Card Header -->
+                <div class="bg-dark text-center py-4 px-3 text-white border-bottom border-light-subtle">
+                    <span class="fs-1 text-success mb-2 d-inline-block"><i class="fa-solid fa-user-plus"></i></span>
+                    <h3 class="fw-bold heading-font mb-0 text-white">Create New Account</h3>
+                    <p class="small text-muted mb-0">Join Mama Mboga to shop and manage organic commodities.</p>
+                </div>
+                
+                <!-- Card Body Form -->
+                <div class="card-body p-4 p-md-5">
+                    <form method="POST" action="{{ url_for('auth.register') }}">
+                        {{ registration_form.hidden_tag() }}
+                        
+                        <div class="row g-3 mb-3">
+                            <!-- First Name -->
+                            <div class="col-md-6">
+                                <label for="firstname" class="form-label fw-semibold">First Name</label>
+                                {{ registration_form.firstname(class="form-control py-2", placeholder="First name") }}
+                                {% for error in registration_form.firstname.errors %}
+                                    <span class="text-danger small">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                            
+                            <!-- Last Name -->
+                            <div class="col-md-6">
+                                <label for="lastname" class="form-label fw-semibold">Last Name</label>
+                                {{ registration_form.lastname(class="form-control py-2", placeholder="Last name") }}
+                                {% for error in registration_form.lastname.errors %}
+                                    <span class="text-danger small">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <!-- Username Input -->
+                        <div class="mb-3">
+                            <label for="username" class="form-label fw-semibold">Username</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light text-muted border-end-0"><i class="fa-solid fa-at"></i></span>
+                                {{ registration_form.username(class="form-control border-start-0 ps-0 py-2", placeholder="Enter unique username") }}
+                            </div>
+                            {% for error in registration_form.username.errors %}
+                                <span class="text-danger small">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Email Input -->
+                        <div class="mb-3">
+                            <label for="email" class="form-label fw-semibold">Email Address</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light text-muted border-end-0"><i class="fa-solid fa-envelope"></i></span>
+                                {{ registration_form.email(class="form-control border-start-0 ps-0 py-2", placeholder="e.g. name@example.com") }}
+                            </div>
+                            {% for error in registration_form.email.errors %}
+                                <span class="text-danger small">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Account Type Selection -->
+                        <div class="mb-3">
+                            <label for="role" class="form-label fw-semibold">Account Type</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light text-muted border-end-0"><i class="fa-solid fa-users-gear"></i></span>
+                                {{ registration_form.role(class="form-select border-start-0 ps-0 py-2", id="role-select") }}
+                            </div>
+                        </div>
+
+                        <!-- Store Admin Passcode (hidden by default, shown when Admin selected) -->
+                        <div class="mb-3 d-none" id="admin-passcode-group">
+                            <label for="admin_code" class="form-label fw-semibold text-warning">Admin Verification Passcode</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-warning-subtle text-warning border-end-0"><i class="fa-solid fa-key"></i></span>
+                                {{ registration_form.admin_code(class="form-control border-start-0 ps-0 py-2", placeholder="Enter admin passcode") }}
+                            </div>
+                            <small class="text-muted">Required code to register admin authority. Use <code>admin123</code> for testing.</small>
+                        </div>
+
+                        <div class="row g-3 mb-4">
+                            <!-- Password -->
+                            <div class="col-md-6">
+                                <label for="password" class="form-label fw-semibold">Password</label>
+                                {{ registration_form.password(class="form-control py-2", placeholder="Password") }}
+                                {% for error in registration_form.password.errors %}
+                                    <span class="text-danger small">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                            
+                            <!-- Confirm Password -->
+                            <div class="col-md-6">
+                                <label for="password_confirm" class="form-label fw-semibold">Confirm Password</label>
+                                {{ registration_form.password_confirm(class="form-control py-2", placeholder="Confirm") }}
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn btn-success w-100 py-3 fw-bold shadow-sm mb-3">
+                            <i class="fa-solid fa-user-plus me-2"></i> Register Account
+                        </button>
+                        
+                        <div class="text-center mt-4 border-top pt-3">
+                            <p class="text-muted small mb-0">Already have an account?</p>
+                            <a href="{{ url_for('auth.login') }}" class="text-success fw-bold text-decoration-none small">
+                                Sign In Instead <i class="fa-solid fa-right-to-bracket ms-1"></i>
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Client-side dynamic display of admin passcode input
+    document.addEventListener("DOMContentLoaded", function() {
+        const roleSelect = document.getElementById("role-select");
+        const adminGroup = document.getElementById("admin-passcode-group");
+        
+        function toggleAdminCode() {
+            if (roleSelect && roleSelect.value === "admin") {
+                adminGroup.classList.remove("d-none");
+            } else if (adminGroup) {
+                adminGroup.classList.add("d-none");
+            }
+        }
+        
+        if (roleSelect) {
+            roleSelect.addEventListener("change", toggleAdminCode);
+            toggleAdminCode(); // Initialize on load
+        }
+    });
+</script>
+{% endblock %}
