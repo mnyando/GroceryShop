@@ -50,7 +50,7 @@ def _init_local_db():
                     "price": 250.0,
                     "unit": "per kg",
                     "description": "Crisp, sweet, and juicy red apples. Perfect for a healthy snack or making delicious pies.",
-                    "image_url": "https://images.pexels.com/photos/102104/pexels-photo-102104.jpeg?auto=compress&cs=tinysrgb&w=800",
+                    "image_url": "/static/images/apples.jpg",
                     "in_stock": True,
                     "created_at": datetime.datetime.now().isoformat()
                 },
