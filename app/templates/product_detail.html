@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product.name }} | Mama Mboga{% endblock %}
+
+{% block content %}
+<section id="product-detail-page">
+
+    <!-- ── Breadcrumb ─────────────────────────────────────────── -->
+    <nav class="pd-breadcrumb" aria-label="breadcrumb">
+        <a href="{{ url_for('main.shop') }}" class="pd-breadcrumb__link">
+            <i class="fa-solid fa-arrow-left" style="font-size:11px;"></i> Back to Market
+        </a>
+        <span class="pd-breadcrumb__sep">/</span>
+        <span class="pd-breadcrumb__current">{{ product.name }}</span>
+    </nav>
+
+    <!-- ── Two-column detail layout ───────────────────────────── -->
+    <div class="pd-layout">
+
+        <!-- LEFT — Feature Image -->
+        <div class="pd-image-col" data-reveal>
+            <div class="pd-image-wrap">
+                <img src="{{ product.image_url }}"
+                     alt="{{ product.name }}"
+                     class="pd-image"
+                     loading="eager"
+                     decoding="async">
+                {% if product.in_stock %}
+                <span class="pd-stock-badge">In Stock</span>
+                {% else %}
+                <span class="pd-stock-badge pd-stock-badge--out">Out of Stock</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- RIGHT — Product Details -->
+        <div class="pd-info-col" data-reveal>
+
+            <!-- Category eyebrow -->
+            <span class="eyebrow">{{ product.category }}</span>
+
+            <!-- Product title -->
+            <h1 class="pd-title">{{ product.name }}</h1>
+
+            <!-- Tags / Badges -->
+            <div class="badges pd-badges">
+                <span class="badge">Locally sourced</span>
+                <span class="badge badge--fresh">Picked daily</span>
+                <span class="badge badge--organic">Pesticide-free</span>
+            </div>
+
+            <!-- ── Price ─────────────────────────────────────── -->
+            <div class="pd-price-row">
+                <span class="pd-price">KSh {{ "{:,.2f}".format(product.price) }}</span>
+                <span class="pd-unit">/ {{ product.unit }}</span>
+            </div>
+
+            <!-- ── Divider ────────────────────────────────────── -->
+            <hr class="pd-divider">
+
+            <!-- ── Description ───────────────────────────────── -->
+            <div class="pd-description">
+                <h4 class="pd-section-label">About this product</h4>
+                <p>{{ product.description }}</p>
+
+                <!-- Kenyan culinary context per category -->
+                {% if product.category == 'Vegetables' %}
+                    {% if 'tomato' in product.name | lower %}
+                    <p>In Kenyan cooking, tomatoes are absolutely indispensable. They are the soul of <strong>kachumbari</strong> — our beloved fresh salsa of raw tomatoes, onions, and dhania (coriander) that accompanies nyama choma and grilled fish. They also form the flavourful base of <strong>nyanya mchuzi</strong> (tomato stew) that goes with ugali, rice, or chapati. Freshness matters: a ripe, farm-fresh tomato gives a depth of flavour that no processed alternative can match.</p>
+                    {% elif 'sukuma' in product.name | lower or 'collard' in product.name | lower or 'kale' in product.name | lower %}
+                    <p>Sukuma Wiki — literally "push the week" in Kiswahili — is Kenya's most beloved leafy green and a daily staple in millions of homes. Sautéed with onions and a pinch of salt, it pairs beautifully with <strong>ugali</strong> for a wholesome, budget-friendly meal. It is equally delicious alongside <strong>githeri</strong> (maize and beans) or tucked into a <strong>chapati</strong> wrap for a quick, nutritious lunch.</p>
+                    {% else %}
+                    <p>Fresh Kenyan vegetables like these are essential to everyday cooking. They are perfect for making hearty stews, adding to <strong>ugali</strong> dishes, or stirring into <strong>githeri</strong> for a complete, nourishing meal. Sourced daily from local farms, they retain maximum nutrition and flavour.</p>
+                    {% endif %}
+                {% elif product.category == 'Fruits' %}
+                    {% if 'lemon' in product.name | lower %}
+                    <p>Fresh lemons are a quiet essential in Kenyan kitchens. A squeeze of lemon juice brightens <strong>pilau</strong> and <strong>biryani</strong>, balances the richness of coconut-based coastal dishes like <strong>mchuzi wa pweza</strong> (octopus curry), and is a must in freshly made <strong>lemonade</strong> or <strong>dawa</strong> (the classic Kenyan ginger-lemon wellness drink). Keep a few in your kitchen — you will reach for them every day.</p>
+                    {% elif 'apple' in product.name | lower %}
+                    <p>Crisp, sweet apples make an excellent healthy snack for the whole family and are popular in Kenyan school lunch boxes. Slice them into fruit salads with mangoes, pawpaws, and pineapple for a refreshing <strong>matunda saladi</strong>. They also pair beautifully with a glass of fresh juice or a pot of black tea — the quintessential Kenyan afternoon treat.</p>
+                    {% else %}
+                    <p>Fresh, locally available fruit is at the heart of the Kenyan food experience. Enjoy them as a wholesome snack, blend into fresh juices, or combine with other tropical fruits for a refreshing <strong>matunda</strong> (fruit) platter perfect for any occasion.</p>
+                    {% endif %}
+                {% elif product.category == 'Grains' %}
+                    {% if 'potato' in product.name | lower %}
+                    <p>Irish potatoes are a cornerstone of Kenyan everyday cooking. They are the star of <strong>karai potatoes</strong> — fried golden with onions, tomatoes, and spices — a beloved street food and home-kitchen favourite. They also bulk up hearty stews, complement <strong>mukimo</strong> (mashed potatoes with green peas and maize), or are simply boiled and served alongside a cup of masala chai for the ultimate Kenyan comfort meal.</p>
+                    {% else %}
+                    <p>Wholesome grains are the backbone of the Kenyan diet. Use them to make <strong>githeri</strong>, stir into thick stews, or grind for <strong>ugali</strong> — the beloved staple served at every Kenyan table. Sourced from trusted local farms, these grains are rich in complex carbohydrates for sustained energy throughout the day.</p>
+                    {% endif %}
+                {% else %}
+                <p>This product is freshly sourced from verified Kenyan farms, bringing you natural, unprocessed goodness at its best. Ideal for everyday family meals, meal-prepping, or adding to your favourite local recipes.</p>
+                {% endif %}
+            </div>
+
+            <!-- ── Freshness guarantee strip ─────────────────── -->
+            <ul class="pd-guarantees">
+                <li><i class="fa-solid fa-truck-fast"></i> Same-day dispatch on orders before 2 PM</li>
+                <li><i class="fa-solid fa-seedling"></i> Sourced directly from local Kenyan farms</li>
+                <li><i class="fa-solid fa-shield-halved"></i> Quality-checked before every delivery</li>
+            </ul>
+
+            <!-- ── Add to Cart CTA ────────────────────────────── -->
+            {% if product.in_stock %}
+            <button id="detail-add-to-cart"
+                    class="pd-cta-btn"
+                    data-id="{{ product.id }}"
+                    data-name="{{ product.name }}"
+                    data-price="{{ product.price }}"
+                    data-image="{{ product.image_url }}"
+                    data-unit="{{ product.unit }}">
+                <i class="fa-solid fa-cart-plus"></i>
+                Add to Cart
+            </button>
+            {% else %}
+            <button class="pd-cta-btn pd-cta-btn--disabled" disabled>
+                <i class="fa-solid fa-ban"></i>
+                Out of Stock
+            </button>
+            {% endif %}
+
+            <a href="{{ url_for('main.shop') }}" class="pd-back-link">
+                ← Continue Shopping
+            </a>
+
+        </div><!-- /pd-info-col -->
+    </div><!-- /pd-layout -->
+
+</section>
+
+<script>
+// Wire up the Add to Cart button on the detail page
+(function () {
+    const btn = document.getElementById("detail-add-to-cart");
+    if (!btn) return;
+
+    btn.addEventListener("click", function () {
+        const id    = btn.dataset.id;
+        const name  = btn.dataset.name;
+        const price = parseFloat(btn.dataset.price);
+        const image = btn.dataset.image;
+        const unit  = btn.dataset.unit;
+
+        // Read the shared cart from localStorage
+        let cart = JSON.parse(localStorage.getItem("mama_cart") || "[]");
+        const existing = cart.find(i => i.id === id);
+        if (existing) {
+            existing.quantity += 1;
+        } else {
+            cart.push({ id, name, price, image, quantity: 1, unit });
+        }
+        localStorage.setItem("mama_cart", JSON.stringify(cart));
+
+        // Trigger the global updateCartUI that lives in app.js
+        if (typeof updateCartUI === "function") updateCartUI();
+
+        // Open cart drawer
+        const drawer = document.getElementById("cartModal");
+        if (drawer) drawer.classList.add("is-open");
+
+        // Micro-interaction on button
+        const original = btn.innerHTML;
+        btn.innerHTML = `<i class="fa-solid fa-check"></i> Added to Cart!`;
+        btn.classList.add("pd-cta-btn--added");
+        btn.disabled = true;
+        setTimeout(() => {
+            btn.innerHTML = original;
+            btn.classList.remove("pd-cta-btn--added");
+            btn.disabled = false;
+        }, 2000);
+    });
+})();
+</script>
+{% endblock %}

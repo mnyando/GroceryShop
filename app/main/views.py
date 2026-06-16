@@ -33,6 +33,13 @@ def shop():
 def about():
     return render_template('about.html')
 
+@main.route('/product/<string:product_id>')
+def product_detail(product_id):
+    product = Product.get_by_id(product_id)
+    if not product:
+        abort(404)
+    return render_template('product_detail.html', product=product)
+
 @main.route('/checkout')
 def checkout():
     # If not logged in, they can still access checkout but we encourage authentication

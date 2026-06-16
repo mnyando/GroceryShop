@@ -35,14 +35,18 @@
                 <div class="product-card-item" data-category="{{ product.category }}" data-name="{{ product.name | lower }}" data-reveal>
                     <div class="product-card">
                         <!-- Product Image Box -->
-                        <div class="product-card__media">
-                            <img src="{{ product.image_url }}" alt="{{ product.name }}" loading="lazy" decoding="async">
-                        </div>
+                        <a href="{{ url_for('main.product_detail', product_id=product.id) }}" class="product-card__media-link" tabindex="-1" aria-hidden="true">
+                            <div class="product-card__media">
+                                <img src="{{ product.image_url }}" alt="{{ product.name }}" loading="lazy" decoding="async">
+                            </div>
+                        </a>
                         
                         <!-- Product Info -->
                         <div class="product-card__body">
                             <span class="eyebrow" style="font-size: 10px; margin-bottom: 2px;">{{ product.category }}</span>
-                            <h3 class="product-card__name" style="margin-bottom: 4px;">{{ product.name }}</h3>
+                            <h3 class="product-card__name" style="margin-bottom: 4px;">
+                                <a href="{{ url_for('main.product_detail', product_id=product.id) }}" class="product-card__name-link">{{ product.name }}</a>
+                            </h3>
                             {% if product.tagline %}
                             <p class="product-card__tagline">{{ product.tagline }}</p>
                             {% endif %}
