@@ -39,7 +39,7 @@ def _init_local_db():
                     "price": 120.0,
                     "unit": "per kg",
                     "description": "Lush red tomatoes harvested directly from local farms. Rich in flavor and perfect for stews or salads.",
-                    "image_url": "https://images.wallpaperscraft.com/image/tomato_twig_vegetable_108603_1920x1264.jpg",
+                    "image_url": "/static/images/tomatoes.jpg",
                     "in_stock": True,
                     "created_at": datetime.datetime.now().isoformat()
                 },
@@ -61,7 +61,7 @@ def _init_local_db():
                     "price": 80.0,
                     "unit": "per kg",
                     "description": "Zesty and juicy lemons, great for dressings, beverages, and adding a fresh citrus touch to meals.",
-                    "image_url": "https://www.desktopbackground.org/p/2010/09/10/77505_download-wallpapers-3840x2160-lemon-leaf-white-backgrounds-4k_3840x2160_h.jpg",
+                    "image_url": "/static/images/Lemons.jpg",
                     "in_stock": True,
                     "created_at": datetime.datetime.now().isoformat()
                 },
@@ -72,7 +72,7 @@ def _init_local_db():
                     "price": 95.0,
                     "unit": "per kg",
                     "description": "Premium quality Irish potatoes, ideal for roasting, baking, boiling, or making fresh potato chips.",
-                    "image_url": "https://images.pexels.com/photos/2286776/pexels-photo-2286776.jpeg?auto=compress&cs=tinysrgb&w=800",
+                    "image_url": "/static/images/potatoes.jpg",
                     "in_stock": True,
                     "created_at": datetime.datetime.now().isoformat()
                 },
@@ -83,7 +83,7 @@ def _init_local_db():
                     "price": 50.0,
                     "unit": "per bunch",
                     "description": "Fresh, locally-grown collard greens (Sukuma Wiki), hand-picked daily. High in nutrients and extremely delicious.",
-                    "image_url": "https://images.pexels.com/photos/1359326/pexels-photo-1359326.jpeg?auto=compress&cs=tinysrgb&w=800",
+                    "image_url": "/static/images/kale.jpg",
                     "in_stock": True,
                     "created_at": datetime.datetime.now().isoformat()
                 }
