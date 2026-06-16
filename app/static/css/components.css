@@ -434,3 +434,27 @@ button:active, .hero__cta:active, .product-card__cta:active {
   margin-bottom: var(--space-xs);
 }
 
+/* ============================================================
+   Customer Voices / Testimonials Component
+   ============================================================ */
+.voices {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--space-md);
+}
+.voice {
+  padding: var(--space-md);
+  border-left: 2px solid var(--color-accent);
+}
+.voice p {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  color: var(--color-ink);
+  margin-bottom: var(--space-sm);
+}
+.voice cite {
+  font-size: 13px;
+  color: var(--color-ink-tertiary);
+  font-style: normal;
+}
+
