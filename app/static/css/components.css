@@ -423,3 +423,14 @@ button:active, .hero__cta:active, .product-card__cta:active {
   color: var(--color-accent);
 }
 
+/* ============================================================
+   Stock Urgency Note
+   ============================================================ */
+.stock-note {
+  font-size: 12px;
+  color: var(--color-urgent);
+  font-weight: 500;
+  margin-top: 4px;
+  margin-bottom: var(--space-xs);
+}
+

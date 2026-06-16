@@ -49,9 +49,13 @@
                             </div>
                             <p style="font-size: 13px; color: var(--color-ink-tertiary); margin-bottom: var(--space-sm); flex-grow: 1;">{{ product.description }}</p>
                             
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-sm);">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-xs);">
                                 <span class="product-card__price" style="font-size: 16px; font-weight: 600;">KSh {{ "{:,.2f}".format(product.price) }} <span style="font-size: 12px; color: var(--color-ink-tertiary); font-weight: normal;">/ {{ product.unit }}</span></span>
                             </div>
+                            
+                            {% if product.stock and product.stock <= 5 %}
+                            <p class="stock-note">Only {{ product.stock }} left</p>
+                            {% endif %}
                             
                             {% if product.in_stock %}
                                 <!-- Add To Cart Button -->
