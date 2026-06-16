@@ -16,6 +16,9 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('main.index') }}" id="nav-link-home">Home</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('main.index') }}#about-section" id="nav-link-about">About</a>
+                </li>
                 {% if current_user.is_authenticated and current_user.is_admin %}
                 <li class="nav-item">
                     <a class="nav-link text-warning fw-semibold" href="{{ url_for('main.admin_dashboard') }}" id="nav-link-admin">
