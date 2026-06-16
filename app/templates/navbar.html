@@ -1,57 +1,41 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top glass-navbar py-3">
-    <div class="container">
-        <!-- Logo -->
-        <a class="navbar-brand fw-bold text-success" href="{{ url_for('main.index') }}" id="nav-logo">
-            <i class="fa-solid fa-leaf text-success me-1"></i> MAMA MBOGA
+<header class="nav">
+  <div class="container nav__inner">
+    <!-- Brand Logo -->
+    <a class="nav__brand" href="{{ url_for('main.index') }}" id="nav-logo">
+      Mama&nbsp;Mboga
+    </a>
+    
+    <!-- Primary Navigation Links -->
+    <nav class="nav__links" id="navbarContent" aria-label="Primary">
+      <a href="{{ url_for('main.index') }}" id="nav-link-home">Home</a>
+      <a href="{{ url_for('main.shop') }}" id="nav-link-shop">Shop</a>
+      <a href="{{ url_for('main.about') }}" id="nav-link-about">About</a>
+      {% if current_user.is_authenticated and current_user.is_admin %}
+        <a href="{{ url_for('main.admin_dashboard') }}" id="nav-link-admin" style="font-weight: 600;">Admin Panel</a>
+      {% endif %}
+    </nav>
+    
+    <!-- Actions and Cart -->
+    <div class="nav__actions">
+      {% if current_user.is_authenticated %}
+        <a href="{{ url_for('main.user_profile', uname=current_user.username) }}" class="nav__auth-btn" id="nav-user-greeting" style="font-weight: 600; text-decoration: none;">
+          Hello, {{ current_user.firstname }}
         </a>
-        
-        <!-- Toggle Button for Mobile -->
-        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation" id="nav-toggle-btn">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        
-        <!-- Navigation Links -->
-        <div class="collapse navbar-collapse" id="navbarContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('main.index') }}" id="nav-link-home">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('main.shop') }}" id="nav-link-shop">Shop</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('main.about') }}" id="nav-link-about">About Us</a>
-                </li>
-                {% if current_user.is_authenticated and current_user.is_admin %}
-                <li class="nav-item">
-                    <a class="nav-link text-warning fw-semibold" href="{{ url_for('main.admin_dashboard') }}" id="nav-link-admin">
-                        <i class="fa-solid fa-gauge me-1"></i> Admin Panel
-                    </a>
-                </li>
-                {% endif %}
-            </ul>
-            
-            <!-- Right side links: Auth status and cart trigger -->
-            <div class="d-flex align-items-center gap-3">
-                {% if current_user.is_authenticated %}
-                    <a href="{{ url_for('main.user_profile', uname=current_user.username) }}" class="navbar-text text-light small d-none d-sm-inline me-2 text-decoration-none" id="nav-user-greeting">
-                        <i class="fa-solid fa-user text-success me-1"></i> Hello, <strong>{{ current_user.firstname }}</strong>
-                    </a>
-                    <a href="{{ url_for('auth.logout') }}" class="btn btn-outline-danger btn-sm px-3" id="nav-link-signout">Sign Out</a>
-                {% else %}
-                    <a href="{{ url_for('auth.login') }}" class="btn btn-outline-success btn-sm px-3 text-light" id="nav-link-signin">Sign In</a>
-                    <a href="{{ url_for('auth.register') }}" class="btn btn-success btn-sm px-3" id="nav-link-signup">Register</a>
-                {% endif %}
-                
-                <!-- Dynamic Cart Trigger Button -->
-                <button type="button" class="btn btn-success position-relative ms-2 px-3" data-bs-toggle="modal" data-bs-target="#cartModal" id="nav-cart-btn">
-                    <i class="fa-solid fa-shopping-cart"></i>
-                    <span class="d-none d-md-inline ms-1">Cart</span>
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-light" id="cart-badge-count">
-                        0
-                    </span>
-                </button>
-            </div>
-        </div>
+        <a href="{{ url_for('auth.logout') }}" class="nav__auth-btn nav__auth-btn--primary" id="nav-link-signout">Sign Out</a>
+      {% else %}
+        <a href="{{ url_for('auth.login') }}" class="nav__auth-btn" id="nav-link-signin">Sign In</a>
+        <a href="{{ url_for('auth.register') }}" class="nav__auth-btn nav__auth-btn--primary" id="nav-link-signup">Register</a>
+      {% endif %}
+      
+      <!-- Cart Drawer Trigger -->
+      <button class="nav__cart" data-cart-open aria-label="Open cart" id="nav-cart-btn">
+        Cart <span class="nav__cart-count" id="cart-badge-count" data-cart-count>0</span>
+      </button>
     </div>
-</nav>
+    
+    <!-- Mobile Menu Toggle -->
+    <button class="nav__toggle" aria-label="Toggle navigation" id="nav-toggle-btn">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+  </div>
+</header>
