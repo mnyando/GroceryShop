@@ -1,8 +1,12 @@
 import os
 from dotenv import load_dotenv
+import socket
 
 # Load environment variables from .env file
 load_dotenv()
+
+# Set default socket connection timeout to prevent hanging on blocked ports (e.g. SMTP on Render)
+socket.setdefaulttimeout(5.0)
 
 class Config:
     '''
