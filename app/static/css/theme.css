@@ -1,0 +1,95 @@
+/* ============================================================
+   Mama Mboga — Clinical Luxury Design Tokens
+   ============================================================ */
+:root {
+  /* --- Color: monochrome + neutral base --- */
+  --color-bg:            #FFFFFF;   /* page */
+  --color-surface:       #FAFAF8;   /* off-white cards/sections */
+  --color-surface-alt:   #F2F1EC;   /* alternating section bands */
+  --color-ink:           #111110;   /* near-black primary text */
+  --color-ink-secondary: #4A4A47;   /* muted text */
+  --color-ink-tertiary:  #8A8A85;   /* hints, captions */
+  --color-line:          #E4E3DD;   /* hairline borders */
+  --color-line-strong:   #C9C8C1;   /* hover/emphasis borders */
+
+  /* --- One restrained accent (fresh, not loud) --- */
+  --color-accent:        #2E5D3B;   /* deep botanical green */
+  --color-accent-soft:   #EAF0EB;   /* accent tint background */
+  --color-urgent:        #A6432E;   /* low-stock / urgency, used sparingly */
+
+  /* --- Typography --- */
+  --font-display: 'Cormorant Garamond', Georgia, serif;  /* editorial headings */
+  --font-sans:    'Inter', system-ui, -apple-system, sans-serif; /* UI + body */
+  --tracking-tight:  -0.01em;
+  --tracking-wide:    0.12em;   /* for small uppercase labels */
+  --leading-tight:    1.25;
+  --leading-normal:   1.6;
+
+  /* --- Spacing scale --- */
+  --space-xs:  8px;
+  --space-sm:  16px;
+  --space-md:  24px;
+  --space-lg:  48px;
+  --space-xl:  80px;
+  --section-padding: 96px;   /* the "expensive" breathing room */
+  --container-max:   1320px;
+  --gutter:          24px;
+
+  /* --- Motion --- */
+  --ease:      cubic-bezier(0.4, 0, 0.2, 1);
+  --dur:       260ms;
+  --dur-slow:  480ms;
+
+  /* --- Flat, clinical shadows (thin, not soft) --- */
+  --shadow-1: 0 1px 3px rgba(0,0,0,0.06);
+  --shadow-2: 0 6px 18px rgba(0,0,0,0.10);
+
+  /* --- Radius (clinical = small, crisp) --- */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+
+  /* --- Focus (accessibility) --- */
+  --focus-ring: 2px solid var(--color-ink);
+  --focus-offset: 2px;
+}
+
+/* --- Reset / base --- */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: var(--leading-normal);
+}
+h1, h2, h3 { font-family: var(--font-display); font-weight: 500; line-height: var(--leading-tight); letter-spacing: var(--tracking-tight); margin: 0 0 var(--space-sm); }
+h1 { font-size: clamp(2.4rem, 5vw, 4rem); }
+h2 { font-size: clamp(1.8rem, 3.5vw, 2.6rem); }
+h3 { font-size: 1.25rem; }
+p  { margin: 0 0 var(--space-sm); color: var(--color-ink-secondary); }
+a  { color: inherit; text-decoration: none; }
+
+/* Small uppercase eyebrow label — a signature of the clinical-luxury look */
+.eyebrow {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-ink-tertiary);
+}
+
+/* Layout container */
+.container { max-width: var(--container-max); margin: 0 auto; padding: 0 var(--gutter); }
+.section   { padding: var(--section-padding) 0; }
+.section--alt { background: var(--color-surface-alt); }
+
+/* Accessibility: visible focus for keyboard users only */
+:focus-visible { outline: var(--focus-ring); outline-offset: var(--focus-offset); }
+
+/* Respect reduced motion globally */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
