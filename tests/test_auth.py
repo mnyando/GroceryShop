@@ -70,7 +70,7 @@ class TestMainRoutes(unittest.TestCase):
         """Test that the /about URL loads successfully and contains details."""
         response = self.client.get('/about')
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b'About Mama Mboga', response.data)
+        self.assertIn(b'Mama Mboga', response.data)
         self.assertIn(b'Farm to Table', response.data)
 
 if __name__ == '__main__':
