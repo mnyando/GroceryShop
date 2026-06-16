@@ -32,8 +32,8 @@
   --space-lg:  48px;
   --space-xl:  80px;
   --section-padding: 96px;   /* the "expensive" breathing room */
-  --container-max:   1320px;
-  --gutter:          24px;
+  --container-max:   1200px;
+  --gutter:          16px;
 
   /* --- Motion --- */
   --ease:      cubic-bezier(0.4, 0, 0.2, 1);
@@ -51,6 +51,12 @@
   /* --- Focus (accessibility) --- */
   --focus-ring: 2px solid var(--color-ink);
   --focus-offset: 2px;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --gutter: 48px;
+  }
 }
 
 /* --- Reset / base --- */

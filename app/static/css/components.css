@@ -226,7 +226,7 @@
 .product-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: var(--space-md);
+  gap: 32px;
 }
 .product-card {
   background: var(--color-bg);
@@ -261,10 +261,10 @@
   transform: scale(1.04);
 }
 .product-card__body {
-  padding: var(--space-sm);
+  padding: var(--space-md);
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
   flex: 1;
 }
 .product-card__name {
