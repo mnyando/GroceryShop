@@ -36,4 +36,11 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }, { threshold: 0.15 });
     reveals.forEach(el => io.observe(el));
+
+    // Mobile nav toggle
+    const navToggle = document.querySelector('.nav__toggle');
+    const navLinks = document.querySelector('.nav__links');
+    navToggle?.addEventListener('click', function () {
+        navLinks?.classList.toggle('nav__links--open');
+    });
 });
