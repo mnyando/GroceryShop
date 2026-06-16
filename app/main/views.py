@@ -7,6 +7,7 @@ from functools import wraps
 import datetime
 import uuid
 import time
+import json
 
 def admin_required(f):
     @wraps(f)
@@ -84,6 +85,71 @@ def mpesa_stk_push():
             'transaction_id': mock_transaction_id,
             'timestamp': datetime.datetime.now().isoformat()
         })
+
+@main.route('/api/payment/mpesa-callback', methods=['POST'])
+def mpesa_callback():
+    data = request.get_json() or {}
+    print(f"[MPESA CALLBACK] Received Callback payload: {json.dumps(data, indent=2)}")
+    
+    try:
+        body = data.get('Body', {})
+        stk_callback = body.get('stkCallback', {})
+        checkout_request_id = stk_callback.get('CheckoutRequestID')
+        result_code = stk_callback.get('ResultCode')
+        result_desc = stk_callback.get('ResultDesc')
+        
+        if not checkout_request_id:
+            print("[MPESA CALLBACK ERROR] Missing CheckoutRequestID in payload.")
+            return jsonify({"ResultCode": 1, "ResultDesc": "Invalid payload format"}), 400
+            
+        print(f"[MPESA CALLBACK] CheckoutRequestID: {checkout_request_id}, ResultCode: {result_code}, ResultDesc: {result_desc}")
+        
+        # Find the matching order by scanning transaction_id
+        orders = Order.get_all()
+        matching_order = None
+        for order in orders:
+            if order.payment_details and order.payment_details.get('transaction_id') == checkout_request_id:
+                matching_order = order
+                break
+                
+        if not matching_order:
+            print(f"[MPESA CALLBACK WARNING] No matching order found for transaction_id {checkout_request_id}.")
+            return jsonify({"ResultCode": 0, "ResultDesc": "Processed, but order not found"}), 200
+            
+        # Check idempotency
+        if matching_order.status in ['paid', 'shipped', 'delivered'] and matching_order.payment_details.get('status') == 'paid':
+            print(f"[MPESA CALLBACK] Order {matching_order.id} is already processed and marked as paid.")
+            return jsonify({"ResultCode": 0, "ResultDesc": "Success (Already processed)"}), 200
+            
+        # Process transaction result
+        if result_code == 0:
+            metadata = stk_callback.get('CallbackMetadata', {}).get('Item', [])
+            receipt_number = ""
+            for item in metadata:
+                if item.get('Name') == 'MpesaReceiptNumber':
+                    receipt_number = item.get('Value', '')
+                    break
+            
+            print(f"[MPESA CALLBACK SUCCESS] Payment successful for Order {matching_order.id}. Mpesa Receipt: {receipt_number}")
+            
+            # Update order details
+            matching_order.status = 'paid'
+            matching_order.payment_details['status'] = 'paid'
+            if receipt_number:
+                matching_order.payment_details['mpesa_receipt'] = receipt_number
+            matching_order.save()
+        else:
+            print(f"[MPESA CALLBACK FAILED] Payment failed for Order {matching_order.id}. Reason: {result_desc}")
+            matching_order.status = 'cancelled'
+            matching_order.payment_details['status'] = 'failed'
+            matching_order.payment_details['failure_reason'] = result_desc
+            matching_order.save()
+            
+        return jsonify({"ResultCode": 0, "ResultDesc": "Success"}), 200
+        
+    except Exception as e:
+        print(f"[MPESA CALLBACK EXCEPTION] Error processing callback: {e}")
+        return jsonify({"ResultCode": 1, "ResultDesc": f"Callback exception: {e}"}), 500
 
 @main.route('/api/order/create', methods=['POST'])
 def create_order():
