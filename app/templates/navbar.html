@@ -17,7 +17,10 @@
                     <a class="nav-link" href="{{ url_for('main.index') }}" id="nav-link-home">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('main.index') }}#about-section" id="nav-link-about">About</a>
+                    <a class="nav-link" href="{{ url_for('main.shop') }}" id="nav-link-shop">Shop</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('main.about') }}" id="nav-link-about">About Us</a>
                 </li>
                 {% if current_user.is_authenticated and current_user.is_admin %}
                 <li class="nav-item">

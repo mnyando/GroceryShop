@@ -20,10 +20,18 @@ def admin_required(f):
 
 @main.route('/')
 def index():
+    return render_template('index.html')
+
+@main.route('/shop')
+def shop():
     products = Product.get_all()
     # Unique categories for filtering
     categories = sorted(list(set([p.category for p in products])))
-    return render_template('index.html', products=products, categories=categories)
+    return render_template('shop.html', products=products, categories=categories)
+
+@main.route('/about')
+def about():
+    return render_template('about.html')
 
 @main.route('/checkout')
 def checkout():

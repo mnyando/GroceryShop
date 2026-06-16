@@ -24,8 +24,6 @@ class TestAuthRegistration(unittest.TestCase):
         username = "test_form_user"
         self.test_usernames.append(username)
         
-        # We need a GET request first to retrieve the CSRF token if enabled (WTF_CSRF_ENABLED is usually disabled in tests, or we can check)
-        # In Flask-WTF, if we run tests without setting WTF_CSRF_ENABLED = False, it may fail. Let's configure it.
         self.app.config['WTF_CSRF_ENABLED'] = False
         self.app.config['TESTING'] = True
         
@@ -42,9 +40,38 @@ class TestAuthRegistration(unittest.TestCase):
         response = self.client.post('/authenticate/register', data=form_data, follow_redirects=True)
         print("\n--- Registration Response ---")
         print(f"Status Code: {response.status_code}")
-        if response.status_code == 500:
-            print("Response Data (Truncated):", response.data[:2000].decode('utf-8'))
         self.assertEqual(response.status_code, 200)
+
+
+class TestMainRoutes(unittest.TestCase):
+    def setUp(self):
+        self.app = create_app('test')
+        self.client = self.app.test_client()
+        self.app_context = self.app.app_context()
+        self.app_context.push()
+
+    def tearDown(self):
+        self.app_context.pop()
+
+    def test_home_route(self):
+        """Test that the root URL loads successfully."""
+        response = self.client.get('/')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b'Sun-Ripened Tomatoes', response.data) # Carousel slide should be there
+
+    def test_shop_route(self):
+        """Test that the /shop URL loads successfully and contains catalog grid."""
+        response = self.client.get('/shop')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b'Our Premium Commodities', response.data)
+        self.assertIn(b'Search vegetables', response.data)
+
+    def test_about_route(self):
+        """Test that the /about URL loads successfully and contains details."""
+        response = self.client.get('/about')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b'About Mama Mboga', response.data)
+        self.assertIn(b'Farm to Table', response.data)
 
 if __name__ == '__main__':
     unittest.main()
