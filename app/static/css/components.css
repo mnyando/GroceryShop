@@ -470,3 +470,13 @@ button:active, .hero__cta:active, .product-card__cta:active {
   font-style: normal;
 }
 
+/* ============================================================
+   Product Benefit Tagline
+   ============================================================ */
+.product-card__tagline {
+  font-size: 13px;
+  color: var(--color-ink-tertiary);
+  margin-top: -2px;
+  margin-bottom: var(--space-xs);
+}
+
