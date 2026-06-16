@@ -302,3 +302,63 @@
   border-color: var(--color-ink);
 }
 
+/* ============================================================
+   Cart Modal Side Drawer Component
+   ============================================================ */
+.cart-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: none;
+}
+.cart-modal.is-open {
+  display: block;
+}
+.cart-modal__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(17,17,16,0.4);
+}
+.cart-modal__panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: min(420px, 100%);
+  background: var(--color-bg);
+  border-left: 1px solid var(--color-line);
+  padding: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform var(--dur) var(--ease);
+  z-index: 101;
+}
+.cart-modal.is-open .cart-modal__panel {
+  transform: translateX(0);
+}
+.cart-modal__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: var(--space-sm);
+  border-bottom: 1px solid var(--color-line);
+}
+.cart-modal__checkout {
+  margin-top: auto;
+  background: var(--color-accent);
+  color: #fff;
+  border: none;
+  padding: 16px;
+  border-radius: var(--radius-sm);
+  font-size: 15px;
+  cursor: pointer;
+  transition: background var(--dur) var(--ease), transform var(--dur) var(--ease);
+}
+.cart-modal__checkout:hover {
+  background: var(--color-ink);
+}
+.cart-modal__checkout:active {
+  transform: translateY(1px);
+}
+

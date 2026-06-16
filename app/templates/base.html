@@ -67,34 +67,33 @@
         </div>
     </footer>
 
-    <!-- Shopping Cart Modal Structure -->
-    <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-scrollable">
-            <div class="modal-content glass-card border border-light">
-                <div class="modal-header border-bottom border-light-subtle bg-dark text-white">
-                    <h5 class="modal-title fw-bold heading-font" id="cartModalLabel"><i class="fa-solid fa-shopping-basket text-success me-2"></i> Your Grocery Cart</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-toggle="modal" aria-label="Close"></button>
+    <!-- Shopping Cart Modal Structure (Redesigned as Side Drawer) -->
+    <div class="cart-modal" id="cartModal">
+        <div class="cart-modal__overlay" data-cart-close></div>
+        <div class="cart-modal__panel">
+            <div class="cart-modal__head">
+                <h3 style="margin: 0; font-family: var(--font-display); font-size: 1.5rem;">Your Cart</h3>
+                <button type="button" style="background: none; border: none; font-size: 24px; cursor: pointer; color: var(--color-ink);" data-cart-close aria-label="Close cart">&times;</button>
+            </div>
+            
+            <div style="flex: 1; overflow-y: auto; padding: var(--space-sm) 0;" id="cart-modal-items">
+                <!-- Dynamic items added here by Javascript -->
+            </div>
+            
+            <div class="text-center py-4 d-none" id="cart-empty-message" style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: var(--space-sm);">
+                <i class="fa-solid fa-cart-arrow-down fs-1" style="color: var(--color-line-strong);"></i>
+                <h4 style="font-family: var(--font-display); color: var(--color-ink-secondary); margin: 0;">Your cart is empty</h4>
+                <p style="font-size: 14px; color: var(--color-ink-tertiary); margin: 0;">Add fresh produce from our catalog to get started!</p>
+            </div>
+            
+            <div style="border-top: 1px solid var(--color-line); padding-top: var(--space-sm); display: flex; flex-direction: column; gap: var(--space-sm);">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-size: 14px; font-weight: 500; color: var(--color-ink-secondary);">Total Price</span>
+                    <span style="font-size: 20px; font-weight: 600; font-variant-numeric: tabular-nums;" id="cart-total-price-display">KSh 0.00</span>
                 </div>
-                <div class="modal-body p-4">
-                    <div class="cart-items-container" id="cart-modal-items">
-                        <!-- Dynamic items added here by Javascript -->
-                    </div>
-                    
-                    <div class="text-center py-4 d-none" id="cart-empty-message">
-                        <i class="fa-solid fa-cart-arrow-down fs-1 text-muted mb-3 animate-bounce"></i>
-                        <h4 class="text-muted">Your cart is currently empty</h4>
-                        <p class="text-muted small">Add fresh produce from our catalog to get started!</p>
-                    </div>
-                </div>
-                <div class="modal-footer border-top border-light-subtle bg-light flex-column align-items-stretch p-4">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h5 class="fw-bold heading-font text-dark mb-0">Total Price:</h5>
-                        <h4 class="fw-extrabold text-success mb-0" id="cart-total-price-display">KSh 0.00</h4>
-                    </div>
-                    <div class="d-flex gap-3">
-                        <button class="btn btn-outline-danger px-4 py-2" id="clear-cart-modal-btn">Clear Cart</button>
-                        <a href="{{ url_for('main.checkout') }}" class="btn btn-success flex-grow-1 py-2 fw-bold" id="checkout-modal-btn">Proceed to Checkout <i class="fa-solid fa-arrow-right ms-1"></i></a>
-                    </div>
+                <div style="display: flex; gap: var(--space-xs);">
+                    <button class="filter-btn" style="flex: 1; border-color: var(--color-urgent); color: var(--color-urgent);" id="clear-cart-modal-btn">Clear Cart</button>
+                    <a href="{{ url_for('main.checkout') }}" class="cart-modal__checkout" id="checkout-modal-btn" style="flex: 2; text-align: center; display: inline-block; text-decoration: none; font-weight: 500; line-height: 1;">Checkout</a>
                 </div>
             </div>
         </div>
@@ -108,6 +107,7 @@
     
     <!-- Global Custom JS -->
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    <script defer src="{{ url_for('static', filename='js/interactions.js') }}"></script>
     {% block scripts %}{% endblock %}
 </body>
 </html>
