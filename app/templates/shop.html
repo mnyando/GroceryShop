@@ -4,69 +4,64 @@
 
 {% block content %}
 <!-- Shop Catalog Container -->
-<section class="container mt-5 py-3" id="shop-catalog">
-    <div class="text-center mb-5">
-        <h2 class="display-5 fw-bold heading-font text-dark mb-2">Our Premium Commodities</h2>
-        <p class="text-muted fs-5 col-md-8 mx-auto">Explore high-quality, pesticide-free, fresh produce sourced from local farmers at competitive prices.</p>
-        <hr class="w-25 mx-auto text-success border-3">
+<section class="container section" id="shop-catalog">
+    <div style="margin-bottom: var(--space-lg);">
+        <span class="eyebrow">Our Market</span>
+        <h1 style="margin-top: var(--space-xs); margin-bottom: var(--space-xs);">Fresh Produce</h1>
+        <p style="max-width: 600px; color: var(--color-ink-secondary);">Explore high-quality, pesticide-free, organic farm produce sourced directly from local farmers at competitive prices.</p>
     </div>
 
     <!-- Filters & Search Toolbar -->
-    <div class="row g-3 justify-content-between align-items-center mb-4 p-3 bg-light rounded shadow-sm border">
+    <div class="shop-toolbar" style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-md); margin-bottom: var(--space-xl); border-bottom: 1px solid var(--color-line); padding-bottom: var(--space-md);">
         <!-- Search Input -->
-        <div class="col-md-4">
-            <div class="input-group">
-                <span class="input-group-text bg-white border-end-0"><i class="fa-solid fa-magnifying-glass text-muted"></i></span>
-                <input type="text" class="form-control border-start-0 ps-0" placeholder="Search vegetables, fruits..." id="search-input">
-            </div>
+        <div class="search-wrap" style="flex: 1; min-width: 280px; max-width: 400px; position: relative;">
+            <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--color-ink-tertiary); font-size: 14px;"></i>
+            <input type="text" placeholder="Search vegetables, fruits..." id="search-input" style="width: 100%; padding: 12px 14px 12px 38px; border: 1px solid var(--color-line-strong); border-radius: var(--radius-sm); font-family: var(--font-sans); font-size: 14px; outline: none; transition: border-color var(--dur) var(--ease);">
         </div>
         
         <!-- Category Tab Buttons -->
-        <div class="col-md-7 text-md-end">
-            <div class="d-flex flex-wrap gap-2 justify-content-md-end" id="category-filters">
-                <button class="btn btn-success px-4 rounded-pill filter-btn active" data-category="all">All Items</button>
-                {% for category in categories %}
-                <button class="btn btn-outline-success px-3 rounded-pill filter-btn" data-category="{{ category }}">{{ category }}</button>
-                {% endfor %}
-            </div>
+        <div id="category-filters" style="display: flex; flex-wrap: wrap; gap: var(--space-xs);">
+            <button class="filter-btn active" data-category="all">All Items</button>
+            {% for category in categories %}
+            <button class="filter-btn" data-category="{{ category }}">{{ category }}</button>
+            {% endfor %}
         </div>
     </div>
 
     <!-- Product Card Grid -->
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" id="products-grid">
+    <div class="product-grid" id="products-grid">
         {% if products %}
             {% for product in products %}
-                <div class="col product-card-item" data-category="{{ product.category }}" data-name="{{ product.name | lower }}">
-                    <div class="card h-100 shadow-sm border border-light-subtle rounded-3 overflow-hidden transition-card">
+                <div class="product-card-item" data-category="{{ product.category }}" data-name="{{ product.name | lower }}">
+                    <div class="product-card">
                         <!-- Product Image Box -->
-                        <div class="position-relative overflow-hidden">
-                            <div class="ratio ratio-4x3 bg-light">
-                                <img src="{{ product.image_url }}" class="card-img-top object-fit-cover" alt="{{ product.name }}">
-                            </div>
-                            <span class="position-absolute top-0 end-0 bg-success text-white px-3 py-1 m-3 rounded-pill fs-7 fw-semibold shadow-sm" style="z-index: 2;">
-                                {{ product.category }}
-                            </span>
+                        <div class="product-card__media">
+                            <img src="{{ product.image_url }}" alt="{{ product.name }}" loading="lazy">
                         </div>
                         
                         <!-- Product Info -->
-                        <div class="card-body d-flex flex-column p-4">
-                            <h4 class="card-title fw-bold text-dark mb-1 heading-font fs-5">{{ product.name }}</h4>
-                            <p class="text-success fw-bold fs-5 mb-2">KSh {{ "{:,.2f}".format(product.price) }} <span class="text-muted fs-7 fw-normal">/ {{ product.unit }}</span></p>
-                            <p class="card-text text-muted small flex-grow-1 mb-4">{{ product.description }}</p>
+                        <div class="product-card__body">
+                            <span class="eyebrow" style="font-size: 10px; margin-bottom: 2px;">{{ product.category }}</span>
+                            <h3 class="product-card__name" style="margin-bottom: 4px;">{{ product.name }}</h3>
+                            <p style="font-size: 13px; color: var(--color-ink-tertiary); margin-bottom: var(--space-sm); flex-grow: 1;">{{ product.description }}</p>
+                            
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-sm);">
+                                <span class="product-card__price" style="font-size: 16px; font-weight: 600;">KSh {{ "{:,.2f}".format(product.price) }} <span style="font-size: 12px; color: var(--color-ink-tertiary); font-weight: normal;">/ {{ product.unit }}</span></span>
+                            </div>
                             
                             {% if product.in_stock %}
-                                <!-- Add To Cart Interface -->
-                                <button type="button" class="btn btn-outline-success w-100 py-2 fw-semibold add-to-cart-action-btn"
+                                <!-- Add To Cart Button -->
+                                <button type="button" class="product-card__cta add-to-cart-action-btn"
                                         data-id="{{ product.id }}"
                                         data-name="{{ product.name }}"
                                         data-price="{{ product.price }}"
                                         data-image="{{ product.image_url }}"
                                         data-unit="{{ product.unit }}">
-                                    <i class="fa-solid fa-cart-plus me-1"></i> Add To Cart
+                                    Add To Cart
                                 </button>
                             {% else %}
-                                <button type="button" class="btn btn-secondary w-100 py-2 fw-semibold" disabled>
-                                    <i class="fa-solid fa-ban me-1"></i> Out of Stock
+                                <button type="button" class="product-card__cta" style="border-color: var(--color-line); color: var(--color-ink-tertiary); cursor: not-allowed;" disabled>
+                                    Out of Stock
                                 </button>
                             {% endif %}
                         </div>
@@ -74,9 +69,10 @@
                 </div>
             {% endfor %}
         {% else %}
-            <div class="col-12 text-center py-5">
-                <i class="fa-solid fa-box-open fs-1 text-muted mb-3"></i>
-                <h4 class="text-muted">No products available at the moment. Check back soon!</h4>
+            <div class="shop-empty-state" style="grid-column: 1 / -1; text-align: center; padding: var(--space-xl) 0;">
+                <i class="fa-solid fa-box-open" style="font-size: 2.5rem; color: var(--color-line-strong); margin-bottom: var(--space-sm);"></i>
+                <h4 style="color: var(--color-ink-secondary);">No products available</h4>
+                <p style="color: var(--color-ink-tertiary);">Check back soon for fresh farm harvests.</p>
             </div>
         {% endif %}
     </div>

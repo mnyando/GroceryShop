@@ -63,7 +63,7 @@ class TestMainRoutes(unittest.TestCase):
         """Test that the /shop URL loads successfully and contains catalog grid."""
         response = self.client.get('/shop')
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b'Our Premium Commodities', response.data)
+        self.assertIn(b'Fresh Produce', response.data)
         self.assertIn(b'Search vegetables', response.data)
 
     def test_about_route(self):
