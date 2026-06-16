@@ -193,19 +193,31 @@
 }
 .hero__cta {
   display: inline-block;
-  background: #fff;
-  color: var(--color-ink);
+  background: var(--color-ink);
+  color: #fff;
+  border: 1px solid var(--color-ink);
   padding: 14px 32px;
   border-radius: var(--radius-sm);
   font-weight: 500;
   letter-spacing: 0.02em;
+  text-align: center;
   transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease), background var(--dur) var(--ease), color var(--dur) var(--ease);
 }
 .hero__cta:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-2);
+  background: transparent;
+  color: var(--color-ink);
+}
+.hero .hero__cta {
+  background: #fff;
+  color: var(--color-ink);
+  border-color: #fff;
+}
+.hero .hero__cta:hover {
   background: var(--color-ink);
   color: #fff;
+  border-color: var(--color-ink);
 }
 
 /* ============================================================
