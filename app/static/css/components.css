@@ -362,3 +362,23 @@
   transform: translateY(1px);
 }
 
+/* ============================================================
+   About Us Page Pillars Component
+   ============================================================ */
+.pillars {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--space-md);
+}
+.pillar {
+  padding: var(--space-md);
+  border-top: 2px solid var(--color-ink);
+  background: var(--color-bg);
+}
+.pillar h3 {
+  margin-top: var(--space-xs);
+  margin-bottom: var(--space-xs);
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+}
+
