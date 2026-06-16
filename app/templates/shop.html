@@ -5,7 +5,7 @@
 {% block content %}
 <!-- Shop Catalog Container -->
 <section class="container section" id="shop-catalog">
-    <div style="margin-bottom: var(--space-lg);">
+    <div style="margin-bottom: var(--space-lg);" data-reveal>
         <span class="eyebrow">Our Market</span>
         <h1 style="margin-top: var(--space-xs); margin-bottom: var(--space-xs);">Fresh Produce</h1>
         <p style="max-width: 600px; color: var(--color-ink-secondary);">Explore high-quality, pesticide-free, organic farm produce sourced directly from local farmers at competitive prices.</p>
@@ -32,7 +32,7 @@
     <div class="product-grid" id="products-grid">
         {% if products %}
             {% for product in products %}
-                <div class="product-card-item" data-category="{{ product.category }}" data-name="{{ product.name | lower }}">
+                <div class="product-card-item" data-category="{{ product.category }}" data-name="{{ product.name | lower }}" data-reveal>
                     <div class="product-card">
                         <!-- Product Image Box -->
                         <div class="product-card__media">
