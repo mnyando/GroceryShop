@@ -64,8 +64,13 @@ def register():
             # Silently log if SMTP variables aren't configured
             print(f"[MAIL] Safe Warning: Could not send email welcome notice. Reason: {e}")
 
-        flash('Registration successful! Please sign in.')
-        return redirect(url_for('auth.login'))
+        # Automatically log in the user after successful registration
+        login_user(user)
+        flash('Registration successful! Welcome to Mama Mboga.')
+        
+        if user.is_admin:
+            return redirect(url_for('main.admin_dashboard'))
+        return redirect(url_for('main.index'))
 
     return render_template('auth/register.html', registration_form=form)
 
