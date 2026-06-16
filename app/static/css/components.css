@@ -375,6 +375,20 @@
 .cart-modal__checkout:active {
   transform: translateY(1px);
 }
+.cart-item-row {
+  display: grid;
+  grid-template-columns: 60px 1fr auto;
+  align-items: center;
+  gap: 15px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--color-line);
+}
+.cart-item-img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+}
 
 /* ============================================================
    About Us Page Pillars Component

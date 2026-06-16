@@ -1,202 +1,32 @@
-/* Modern Design System & CSS Variables for Mama Mboga */
-:root {
-    --primary-color: #10b981;       /* Emerald */
-    --primary-hover: #059669;       /* Dark Emerald */
-    --accent-color: #34d399;        /* Mint Accent */
-    --dark-forest: #064e3b;         /* Deep Forest */
-    --light-bg: #f8fafc;            /* Soft slate background */
-    --card-bg: #ffffff;
-    --text-main: #0f172a;           /* Dark slate text */
-    --text-muted: #64748b;         /* Muted text */
-    --border-soft: #e2e8f0;         /* Border slate */
-    --glass-bg: rgba(15, 23, 42, 0.85); /* Translucent navbar overlay */
-    
-    --font-inter: 'Inter', sans-serif;
-    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
+/* ============================================================
+   Mama Mboga — Legacy overrides, Form UI and Page layouts
+   ============================================================ */
 
-body {
-    font-family: var(--font-inter);
-    background-color: var(--light-bg);
-    color: var(--text-main);
-    overflow-x: hidden;
-    scroll-behavior: smooth;
-}
-
-/* Heading Font */
-.heading-font {
-    font-family: var(--font-inter);
-    letter-spacing: -0.025em;
-}
-
-/* Glassmorphism Sticky Navbar */
-.glass-navbar {
-    background-color: var(--glass-bg) !important;
-    backdrop-filter: blur(12px) saturate(180%);
-    -webkit-backdrop-filter: blur(12px) saturate(180%);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-}
-
-.navbar-brand {
-    font-size: 1.4rem;
-    letter-spacing: -0.03em;
-}
-
-.nav-link {
-    font-weight: 500;
-    color: rgba(255, 255, 255, 0.75) !important;
-    transition: var(--transition-smooth);
-}
-
-.nav-link:hover, .nav-link.active {
-    color: var(--primary-color) !important;
-}
-
-/* Hero Carousel */
-.hero-carousel-section {
-    position: relative;
-    width: 100%;
-}
-
-.carousel-item {
-    height: 75vh;
-    min-height: 450px;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    transition: transform 1.2s ease-in-out, opacity 1.2s ease-in-out;
-}
-
-.carousel-caption {
-    bottom: 0;
-    padding-bottom: 8%;
-    text-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
-}
-
-.text-shadow {
-    text-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
-}
-
-.fw-extrabold {
-    font-weight: 800;
-}
-
-.letter-spacing {
-    letter-spacing: 0.1em;
-}
-
-/* Card hover animation */
-.transition-card {
-    transition: var(--transition-smooth);
-}
-
-.product-card-item:hover .transition-card {
-    transform: translateY(-6px);
-    box-shadow: 0 12px 20px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
-    border-color: rgba(16, 185, 129, 0.2) !important;
-}
-
-/* Category Filter pill buttons */
-.filter-btn {
-    transition: var(--transition-smooth);
-    border-width: 1.5px;
-    font-weight: 600;
-    font-size: 0.9rem;
-}
-
-.filter-btn:not(.active) {
-    background-color: transparent;
-    color: var(--primary-color);
-}
-
-.filter-btn:not(.active):hover {
-    background-color: var(--primary-color);
-    color: white;
-}
-
-/* Modals glassmorphic styling */
-.glass-card {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.3) !important;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15) !important;
-    border-radius: 16px !important;
-    overflow: hidden;
-}
-
-/* Cart item list entry styling */
-.cart-item-row {
-    display: grid;
-    grid-template-columns: 60px 1fr auto;
-    align-items: center;
-    gap: 15px;
-    padding: 12px 0;
-    border-bottom: 1px solid var(--border-soft);
-}
-
-.cart-item-img {
-    width: 60px;
-    height: 60px;
-    object-fit: cover;
-    border-radius: 8px;
-}
-
-/* Primary emerald button themes */
-.btn-success {
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
-    transition: var(--transition-smooth);
-}
-
-.btn-success:hover, .btn-success:active, .btn-success:focus {
-    background-color: var(--primary-hover) !important;
-    border-color: var(--primary-hover) !important;
-}
-
-.btn-outline-success {
-    color: var(--primary-color);
-    border-color: var(--primary-color);
-    border-width: 1.5px;
-    transition: var(--transition-smooth);
-}
-
-.btn-outline-success:hover {
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
-}
-
-/* Form layouts */
-.form-control:focus, .form-select:focus {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 0.25rem rgba(16, 185, 129, 0.15);
-}
-
-/* Checkout payment method pills */
+/* Checkout payment method pills custom states */
 #paymentTab .nav-link.active {
-    background-color: var(--primary-color) !important;
-    color: white !important;
+    background-color: var(--color-accent) !important;
+    color: #fff !important;
 }
 
 #paymentTab .nav-link {
-    color: var(--text-muted);
+    color: var(--color-ink-secondary);
 }
 
 #paymentTab .nav-link:hover:not(.active) {
-    color: var(--primary-color);
+    color: var(--color-accent);
 }
 
-/* Font helpers */
+/* Font and layout helpers */
 .fs-7 {
     font-size: 0.85rem;
 }
 
-/* Table overrides */
+/* Table overrides for admin pages */
 .table-dark {
-    background-color: var(--dark-forest) !important;
+    background-color: var(--color-accent) !important;
 }
 
-/* Animations */
+/* Payment bounce indicators */
 @keyframes bounce {
     0%, 100% {
         transform: translateY(0);
@@ -210,8 +40,8 @@ body {
     animation: bounce 2s infinite ease-in-out;
 }
 
-/* Custom categories color markers */
+/* Background utilities */
 .bg-emerald {
-    background-color: #059669 !important;
-    color: white;
+    background-color: var(--color-accent) !important;
+    color: #fff;
 }
