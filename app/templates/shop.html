@@ -79,6 +79,12 @@
                     </div>
                 </div>
             {% endfor %}
+            <!-- Dynamic No Results Empty State (visible when search/filter hides all items) -->
+            <div id="shop-no-results" class="shop-empty-state d-none" style="grid-column: 1 / -1; text-align: center; padding: var(--space-xl) 0;">
+                <i class="fa-solid fa-magnifying-glass" style="font-size: 2.5rem; color: var(--color-line-strong); margin-bottom: var(--space-sm);"></i>
+                <h4 style="font-family: var(--font-display); font-size: 1.5rem; font-weight: 500; color: var(--color-ink-secondary); margin-bottom: var(--space-xs);">No matching products found</h4>
+                <p style="color: var(--color-ink-tertiary); font-family: var(--font-sans); font-size: 14px;">Try adjusting your search terms or filters.</p>
+            </div>
         {% else %}
             <div class="shop-empty-state" style="grid-column: 1 / -1; text-align: center; padding: var(--space-xl) 0;">
                 <i class="fa-solid fa-box-open" style="font-size: 2.5rem; color: var(--color-line-strong); margin-bottom: var(--space-sm);"></i>

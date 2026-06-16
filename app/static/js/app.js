@@ -182,6 +182,7 @@ function setupCategoryFilters() {
                     card.classList.add("d-none");
                 }
             });
+            updateEmptyState();
         });
     }
 }
@@ -202,7 +203,21 @@ function setupFuzzySearch() {
                     card.classList.add("d-none");
                 }
             });
+            updateEmptyState();
         });
+    }
+}
+
+// Toggle dynamic search/filter empty state
+function updateEmptyState() {
+    const noResults = document.getElementById("shop-no-results");
+    if (noResults) {
+        const visibleCards = document.querySelectorAll(".product-card-item:not(.d-none)");
+        if (visibleCards.length === 0) {
+            noResults.classList.remove("d-none");
+        } else {
+            noResults.classList.add("d-none");
+        }
     }
 }
 
