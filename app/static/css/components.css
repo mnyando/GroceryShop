@@ -402,3 +402,24 @@ button:active, .hero__cta:active, .product-card__cta:active {
   transform: translateY(1px);
 }
 
+/* ============================================================
+   Freshness / Sourcing Badges
+   ============================================================ */
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.badge {
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-alt);
+  color: var(--color-ink-secondary);
+}
+.badge--fresh {
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+}
+
