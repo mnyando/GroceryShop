@@ -4,8 +4,10 @@
    Shop Catalog Page: Padding Override (beats Bootstrap .container)
    ============================================================ */
 #shop-catalog {
-  padding-left: clamp(40px, 8vw, 120px);
-  padding-right: clamp(40px, 8vw, 120px);
+  padding-left: clamp(16px, 2.5vw, 32px);
+  padding-right: clamp(16px, 2.5vw, 32px);
+  padding-top: var(--space-lg);
+  padding-bottom: var(--space-lg);
 }
 
 /* Centre the intro block and give it a comfortable inset */
